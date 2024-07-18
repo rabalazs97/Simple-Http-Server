@@ -23,7 +23,7 @@ jobs:
 
       - name: Output repo name
         id: repoName
-        run: echo "repo=${{ DOCKER_USERNAME }}/${{ PROJ_NAME }}" >> $GITHUB_OUTPUT
+        run: echo "repo=$DOCKER_USERNAME/$PROJ_NAME" >> $GITHUB_OUTPUT
 
       - name: Build Docker image
         run: |
