@@ -1,0 +1,35 @@
+name: Simple Http Server Docker Image Build and Push
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  PROJ_NAME: "httpserver"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Docker login
+        run: echo "$DOCKER_PAT" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        env:
+          DOCKER_PAT: ${{ secrets.DOCKER_PAT }}
+
+      - name: Output repo name
+        id: repoName
+        run: echo "repo=${ DOCKER_USERNAME }/${ PROJ_NAME }" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        run: |
+          cd app
+          docker build -t "${ steps.repoName.outputs.repo }:latest" -t "${{ steps.repoName.outputs.repo }}:${{ github.run_number }}" .
+
+      - name: Push Docker image
+        run: |
+          docker push "${ steps.repoName.outputs.repo }" --all-tags
