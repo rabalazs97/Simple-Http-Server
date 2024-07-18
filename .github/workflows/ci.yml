@@ -23,13 +23,13 @@ jobs:
 
       - name: Output repo name
         id: repoName
-        run: echo "repo=${ DOCKER_USERNAME }/${ PROJ_NAME }" >> $GITHUB_OUTPUT
+        run: echo "repo=${{ DOCKER_USERNAME }}/${{ PROJ_NAME }}" >> $GITHUB_OUTPUT
 
       - name: Build Docker image
         run: |
           cd app
-          docker build -t "${ steps.repoName.outputs.repo }:latest" -t "${{ steps.repoName.outputs.repo }}:${{ github.run_number }}" .
+          docker build -t "${{ steps.repoName.outputs.repo }}:latest" -t "${{ steps.repoName.outputs.repo }}:${{ github.run_number }}" .
 
       - name: Push Docker image
         run: |
-          docker push "${ steps.repoName.outputs.repo }" --all-tags
+          docker push "${{ steps.repoName.outputs.repo }}" --all-tags
