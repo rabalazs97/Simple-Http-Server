@@ -1,6 +1,7 @@
 name: Simple Http Server Docker Image Build and Push
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -32,4 +33,12 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push "${{ steps.repoName.outputs.repo }}" --all-tags
+          BASE=$(git merge-base origin/main HEAD)
+          EVAL=$(git diff --quiet $BASE HEAD -- app/)
+          if [ $EVAL -eq "1" ]; then
+            echo "Changes detected"
+            docker push "${{ steps.repoName.outputs.repo }}" --all-tags
+          else
+            echo "No changes, nothing to do"
+          fi
+          
