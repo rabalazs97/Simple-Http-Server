@@ -33,8 +33,8 @@ jobs:
 
       - name: Push Docker image
         run: |
-          BASE=$(git merge-base origin/main HEAD)
-          EVAL=$(git diff --quiet $BASE HEAD -- app/)
+          : # BASE=$(git merge-base origin/main HEAD)
+          EVAL=$(git diff --quiet HEAD^ HEAD -- app/)
           echo "$EVAL"
           if [ $EVAL -eq "1" ]; then
             echo "Changes detected"
