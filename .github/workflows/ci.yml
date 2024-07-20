@@ -41,5 +41,5 @@ jobs:
             echo "Changes detected"
             docker push "${{ steps.repoName.outputs.repo }}" --all-tags
           else
-            echo "No changes, nothing to do"
+            echo "No changes, nothing to do."
           fi
