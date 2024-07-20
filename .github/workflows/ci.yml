@@ -32,12 +32,10 @@ jobs:
           docker build -t "${{ steps.repoName.outputs.repo }}:latest" -t "${{ steps.repoName.outputs.repo }}:${{ github.run_number }}" .
 
       - name: Push Docker image
+        if: github.ref == 'refs/heads/main'
         run: |
-          BASE=$(git merge-base origin/main HEAD)
-          echo "$BASE"
-          EVAL=$(git diff --quiet HEAD~1 HEAD -- app/)
-          echo "$EVAL"
-          if [ $EVAL -eq "asd" ]; then
+          DIFF=$(git diff HEAD origin/${{ github.ref_name }} -- app/)
+          if [ $DIFF != "" ]; then
             echo "Changes detected"
             docker push "${{ steps.repoName.outputs.repo }}" --all-tags
           else
