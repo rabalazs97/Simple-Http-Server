@@ -36,7 +36,7 @@ jobs:
         run: |
           BASE=$(git merge-base origin/main HEAD)
           echo "$BASE"
-          DIFF=$(git diff HEAD $BASE)
+          DIFF=$(git diff HEAD origin/main)
           echo "$DIFF"
           if [[ $DIFF != "" ]]; then
             echo "Changes detected"
