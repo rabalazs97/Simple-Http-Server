@@ -34,10 +34,12 @@ jobs:
       - name: Push Docker image
         if: github.ref == 'refs/heads/main'
         run: |
-          DIFF=$(git diff HEAD origin/${{ github.ref_name }} -- app/)
+          BASE=$(git merge-base origin/main HEAD)
+          echo "$BASE"
+          DIFF=$(git diff HEAD $BASE -- app/)
           if [[ $DIFF != "" ]]; then
             echo "Changes detected"
-            docker push "${{ steps.repoName.outputs.repo }}" --all-tags
+            : # docker push "${{ steps.repoName.outputs.repo }}" --all-tags
           else
             echo "No changes, nothing to do"
           fi
