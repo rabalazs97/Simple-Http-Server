@@ -33,10 +33,10 @@ jobs:
       - name: Push Docker image
         if: github.event_name == 'pull_request' && github.base_ref == 'main'
         run: |
-          DIFF=$(git diff ${{ github.head_ref }} ${{ github.base_ref }} -- app/)
+          DIFF=$(git diff origin/${{ github.head_ref }} origin/${{ github.base_ref }} -- app/)
           if [[ $DIFF != "" ]]; then
             echo "Changes detected"
             docker push "${{ steps.repoName.outputs.repo }}" --all-tags
           else
-            echo "No changes, nothing to do"
+            echo "No changes, nothing to do."
           fi
