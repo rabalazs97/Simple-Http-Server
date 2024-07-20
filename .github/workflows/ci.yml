@@ -35,6 +35,7 @@ jobs:
         run: |
           BASE=$(git merge-base origin/main HEAD)
           EVAL=$(git diff --quiet $BASE HEAD -- app/)
+          echo "$EVAL"
           if [ $EVAL -eq "1" ]; then
             echo "Changes detected"
             docker push "${{ steps.repoName.outputs.repo }}" --all-tags
