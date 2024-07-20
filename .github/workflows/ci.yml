@@ -33,10 +33,11 @@ jobs:
 
       - name: Push Docker image
         run: |
-          : # BASE=$(git merge-base origin/main HEAD)
-          EVAL=$(git diff --quiet HEAD^ HEAD -- app/)
+          BASE=$(git merge-base origin/main HEAD)
+          echo "$BASE"
+          EVAL=$(git diff --quiet HEAD~1 HEAD -- app/)
           echo "$EVAL"
-          if [ $EVAL -eq "1" ]; then
+          if [ $EVAL -eq "asd" ]; then
             echo "Changes detected"
             docker push "${{ steps.repoName.outputs.repo }}" --all-tags
           else
