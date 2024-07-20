@@ -3,8 +3,7 @@ name: Simple Http Server Docker Image Build and Push
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+  pull_request:
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -32,15 +31,12 @@ jobs:
           docker build -t "${{ steps.repoName.outputs.repo }}:latest" -t "${{ steps.repoName.outputs.repo }}:${{ github.run_number }}" .
 
       - name: Push Docker image
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
         run: |
-          BASE=$(git merge-base origin/main HEAD)
-          echo "$BASE"
-          DIFF=$(git diff HEAD origin/main)
-          echo "$DIFF"
+          DIFF=$(git diff ${{ github.head_ref }} ${{ github.base_ref }} -- app/)
           if [[ $DIFF != "" ]]; then
             echo "Changes detected"
-            : # docker push "${{ steps.repoName.outputs.repo }}" --all-tags
+            docker push "${{ steps.repoName.outputs.repo }}" --all-tags
           else
             echo "No changes, nothing to do"
           fi
