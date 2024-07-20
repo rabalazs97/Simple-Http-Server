@@ -35,7 +35,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           DIFF=$(git diff HEAD origin/${{ github.ref_name }} -- app/)
-          if [ $DIFF != "" ]; then
+          if [[ $DIFF != "" ]]; then
             echo "Changes detected"
             docker push "${{ steps.repoName.outputs.repo }}" --all-tags
           else
